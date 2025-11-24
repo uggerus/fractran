@@ -85,6 +85,22 @@ void test_large_numbers() {
     pass("Large Number Support (GMP)");
 }
 
+void test_step_counter() {
+    // Program: [2/1] (Doubles input forever)
+    std::vector<mpq_class> prog = { mpq_class(2, 1) };
+    Fractran machine(prog, 1);
+
+    // Run 10 steps
+    machine.runMachine(10);
+    assert(machine.getStepCount() == 10);
+
+    // Run 5 more steps (should accumulate to 15)
+    machine.runMachine(5);
+    assert(machine.getStepCount() == 15);
+
+    pass("Step Counter Accumulation");
+}
+
 int main() {
     std::cout << "Running Fractran Test Suite..." << std::endl;
     std::cout << "------------------------------" << std::endl;
@@ -94,6 +110,7 @@ int main() {
     test_halting();
     test_addition();
     test_large_numbers();
+    test_step_counter();
 
     std::cout << "------------------------------" << std::endl;
     std::cout << "All tests passed successfully." << std::endl;

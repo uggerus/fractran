@@ -11,21 +11,23 @@ public:
         fractionList = fractions;
         integer = num;
         halted = false;
+	totalSteps = 0;
     }
 
     void runMachine(int steps);
     void printSequence();
     
-    // -- NEW: Getters for Testing --
     bool isHalted() const { return halted; }
     mpz_class getLastNumber() const { return integer; }
     const std::vector<mpz_class>& getHistory() const { return numberList; }
+    unsigned long long getStepCount() const { return totalSteps; }
 
 private:
     std::vector<mpq_class> fractionList;
     mpz_class integer;
     std::vector<mpz_class> numberList;
     bool halted;
+    unsigned long long totalSteps;
 };
 
 inline void Fractran::runMachine(int steps) {
@@ -49,6 +51,7 @@ inline void Fractran::runMachine(int steps) {
             }
         }
         current_step++;
+	totalSteps++;
     }
 
     if (!match_found) {
