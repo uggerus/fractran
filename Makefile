@@ -1,33 +1,39 @@
-# Compiler to use
+# Compiler
 CXX = g++
 
-# Compiler flags:
-# -std=c++17: Use C++17 standard
-# -Wall -Wextra: Enable warning messages
-# -O2: Optimize for speed (crucial for number crunching)
+# Flags: C++17, Warnings, Optimization
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 
-# Linker flags:
-# -lgmpxx: Link C++ wrapper for GMP
-# -lgmp: Link standard C GMP library
+# Linker flags for GMP
 LDFLAGS = -lgmpxx -lgmp
 
-# The name of the executable file
-TARGET = fractran-simulator
+# Executables
+TARGET_MAIN = prime_game
+TARGET_TEST = test_fractran
 
-# The source file(s)
-SRC = prime-fractran.cpp
+# Source files
+SRC_MAIN = prime-fractran.cpp
+SRC_TEST = test_fractran.cpp
+HEADERS = fractran.h
 
-# Default target (what happens when you just type 'make')
-all: $(TARGET)
+# Default target: Build the main game
+all: $(TARGET_MAIN)
 
-# Rule to link the object file to create the executable
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS)
+# Compile Main Game
+$(TARGET_MAIN): $(SRC_MAIN) $(HEADERS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET_MAIN) $(SRC_MAIN) $(LDFLAGS)
 
-# Clean rule to remove the executable
+# Compile Test Suite
+$(TARGET_TEST): $(SRC_TEST) $(HEADERS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET_TEST) $(SRC_TEST) $(LDFLAGS)
+
+# Run Tests
+test: $(TARGET_TEST)
+	@echo "--- Executing Tests ---"
+	./$(TARGET_TEST)
+
+# Clean up
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET_MAIN) $(TARGET_TEST)
 
-# Phony targets help avoid conflicts with files named 'all' or 'clean'
-.PHONY: all clean
+.PHONY: all clean test
