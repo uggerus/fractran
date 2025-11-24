@@ -34,6 +34,7 @@ void Fractran::runMachine(int steps) {
       }
     }
   }
+  //halted = loop_cond;
 }
 
 void Fractran::printSequence() {
