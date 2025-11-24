@@ -1,48 +1,73 @@
-#include "gmpxx.h"
+#ifndef FRACTRAN_H
+#define FRACTRAN_H
+
+#include <gmpxx.h>
 #include <iostream>
 #include <vector>
 
 class Fractran {
 public:
-  Fractran(std::vector<mpq_class> fractions, mpz_class num) {
-    fractionList = fractions;
-    integer = num;
-    halted = false;
-  }
-  void runMachine(int steps);
-  void printSequence();
+    Fractran(const std::vector<mpq_class>& fractions, mpz_class num) {
+        fractionList = fractions;
+        integer = num;
+        halted = false;
+    }
 
+    void runMachine(int steps);
+    void printSequence();
+    
+    // -- NEW: Getters for Testing --
+    bool isHalted() const { return halted; }
+    mpz_class getLastNumber() const { return integer; }
+    const std::vector<mpz_class>& getHistory() const { return numberList; }
 
 private:
-  std::vector<mpq_class> fractionList;
-  mpz_class integer;
-  std::vector<mpz_class> numberList;
-  bool halted;
+    std::vector<mpq_class> fractionList;
+    mpz_class integer;
+    std::vector<mpz_class> numberList;
+    bool halted;
 };
 
-void Fractran::runMachine(int steps) {
-  bool loop_cond {true};
-  for(auto i = 0; i < steps && loop_cond; ++i){
-    numberList.push_back(integer);
-    loop_cond = false;
-    for(mpq_class i: fractionList) {
-      mpq_class result = integer * i;
-      if(result.get_den() == 1) {
-	integer = result;
-	loop_cond = true;
-	break;
-      }
+inline void Fractran::runMachine(int steps) {
+    if (halted) return;
+
+    bool match_found = true;
+    int current_step = 0;
+
+    while (current_step < steps && match_found) {
+        numberList.push_back(integer);
+        match_found = false;
+
+        for (const auto& frac : fractionList) {
+            mpz_class num = frac.get_num();
+            mpz_class den = frac.get_den();
+
+            if (integer % den == 0) {
+                integer = (integer / den) * num;
+                match_found = true;
+                break; 
+            }
+        }
+        current_step++;
     }
-  }
-  //halted = loop_cond;
+
+    if (!match_found) {
+        halted = true;
+    }
 }
 
-void Fractran::printSequence() {
-  for(auto i: numberList) {
-    std::cout << i << ", ";
-  }
-  std::cout << "END\n";
+inline void Fractran::printSequence() {
+    for (const auto& i : numberList) {
+        std::cout << i << ", ";
+    }
+    if (halted) {
+        std::cout << "HALT" << std::endl;
+    } else {
+        std::cout << "..." << std::endl;
+    }
 }
+
+#endif // FRACTRAN_H
 
 
 

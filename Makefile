@@ -13,7 +13,7 @@ TARGET_TEST = test_fractran
 
 # Source files
 SRC_MAIN = prime-fractran.cpp
-SRC_TEST = test_fractran.cpp
+SRC_TEST = test-fractran.cpp
 HEADERS = fractran.h
 
 # Default target: Build the main game
