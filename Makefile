@@ -13,7 +13,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 LDFLAGS = -lgmpxx -lgmp
 
 # The name of the executable file
-TARGET = fractran_sim
+TARGET = fractran-simulator
 
 # The source file(s)
 SRC = prime-fractran.cpp
