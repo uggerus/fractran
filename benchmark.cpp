@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <chrono> // Required for timing
-#include <iomanip> // For nice output formatting
+#include <chrono> 
+#include <iomanip> 
 #include "fractran.h"
 
 int main() {

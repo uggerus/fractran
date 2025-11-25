@@ -14,7 +14,7 @@ TARGET_BENCH = benchmark
 
 # Source files
 SRC_MAIN = prime-fractran.cpp
-SRC_TEST = test_fractran.cpp
+SRC_TEST = test-fractran.cpp
 SRC_BENCH = benchmark.cpp
 HEADERS = fractran.h
 
