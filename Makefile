@@ -10,7 +10,7 @@ LDFLAGS = -lgmpxx -lgmp
 # Executables
 TARGET_MAIN = prime_game
 TARGET_TEST = test_fractran
-TARGET_BENCH = benchmark
+TARGET_BENCH = benchmark_sim
 
 # Source files
 SRC_MAIN = prime-fractran.cpp
