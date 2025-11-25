@@ -19,7 +19,7 @@ int main() {
 
   mpz_class number = 2;
 
-  Fractran test {Fractran(conwayPrimeFractions, number)};
+  Fractran test {Fractran(conwayPrimeFractions, number, true)};
   test.runMachine(100);
   test.printSequence();
 
