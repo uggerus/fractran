@@ -101,6 +101,34 @@ void test_step_counter() {
     pass("Step Counter Accumulation");
 }
 
+void test_BBf15() {
+  std::vector<mpq_class> fractans = { mpq_class(1, 45),
+				  mpq_class(4, 5),
+				  mpq_class(3, 2),
+				  mpq_class(25, 3)};
+  Fractran machine(fractans, 2);
+  machine.runMachine(100);
+
+  //std::cout << machine.getStepCount() << std::endl;
+  assert(machine.getStepCount() == 28);
+
+  pass("BBf15");
+}
+
+void test_BBf16() {
+  std::vector<mpq_class> fractans = { mpq_class(1, 45),
+				  mpq_class(4, 5),
+				  mpq_class(3, 2),
+				  mpq_class(125, 3)};
+  Fractran machine(fractans, 2);
+  machine.runMachine(100);
+
+  assert(machine.getStepCount() == 53);
+
+  pass("BBf15");
+}
+  
+
 int main() {
     std::cout << "Running Fractran Test Suite..." << std::endl;
     std::cout << "------------------------------" << std::endl;
@@ -111,6 +139,8 @@ int main() {
     test_addition();
     test_large_numbers();
     test_step_counter();
+    test_BBf15();
+    test_BBf16();
 
     std::cout << "------------------------------" << std::endl;
     std::cout << "All tests passed successfully." << std::endl;
