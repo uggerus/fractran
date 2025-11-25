@@ -125,7 +125,7 @@ void test_BBf16() {
 
   assert(machine.getStepCount() == 53);
 
-  pass("BBf15");
+  pass("BBf16");
 }
 
 void test_BBf17() {
@@ -140,7 +140,23 @@ void test_BBf17() {
 
   assert(machine.getStepCount() == 107);
 
-  pass("BBf15");
+  pass("BBf17");
+}
+
+void test_BBf21() {
+  std::vector<mpq_class> fractans = { mpq_class(7, 15),
+				  mpq_class(4, 3),
+				  mpq_class(27, 14),
+				  mpq_class(5, 2),
+				  mpq_class(9, 5)};
+  Fractran machine(fractans, 2);
+  machine.runMachine(100000000);
+
+  std::cout << machine.getStepCount() << std::endl;
+
+  assert(machine.getStepCount() == 107);
+
+  pass("BBf21");
 }
   
 
@@ -154,9 +170,10 @@ int main() {
     test_addition();
     test_large_numbers();
     test_step_counter();
-    //test_BBf15();
-    //test_BBf16();
+    test_BBf15();
+    test_BBf16();
     test_BBf17();
+    test_BBf21();
 
     std::cout << "------------------------------" << std::endl;
     std::cout << "All tests passed successfully." << std::endl;
