@@ -1,14 +1,14 @@
 # Compiler
 CXX = g++
 
-# Flags: -O3 is HIGHLY recommended for benchmarking GMP
+# Flags: 
 CXXFLAGS = -std=c++17 -Wall -Wextra -O3
 
 # Linker flags
 LDFLAGS = -lgmpxx -lgmp
 
 # Executables
-TARGET_MAIN = prime_game
+TARGET_MAIN = fractran
 TARGET_TEST = test_fractran
 TARGET_BENCH = benchmark_sim
 

@@ -191,7 +191,7 @@ int main() {
     test_BBf16();
     test_BBf17();
     test_BBf20();
-    //test_BBf21();
+    test_BBf21();
 
     std::cout << "------------------------------" << std::endl;
     std::cout << "All tests passed successfully." << std::endl;
