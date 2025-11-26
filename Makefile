@@ -10,12 +10,13 @@ LDFLAGS = -lgmpxx -lgmp
 # Executables
 TARGET_MAIN = fractran
 TARGET_TEST = test_fractran
+TARGET_TEST_ARGS = test_args
 TARGET_BENCH = benchmark_sim
 
 # Source files
 SRC_MAIN = fractran_interpreter.cpp
 SRC_TEST = test-fractran.cpp
-SRC_TEST_ARG = test_fractran.cpp
+SRC_TEST_ARGS = test_fractran.cpp
 SRC_BENCH = benchmark.cpp
 HEADERS = fractran.h
 
@@ -43,7 +44,7 @@ test: $(TARGET_TEST)
 	@echo "--- Executing Tests ---"
 	./$(TARGET_TEST)
 	@echo "\n=== Running Argument Tests ==="
-	./$(TARGET_TEST_ARG)
+	./$(TARGET_TEST_ARGS)
 
 # Run Benchmark
 benchmark: $(TARGET_BENCH)
@@ -51,6 +52,6 @@ benchmark: $(TARGET_BENCH)
 	./$(TARGET_BENCH)
 
 clean:
-	rm -f $(TARGET_MAIN) $(TARGET_TEST) $(TARGET_BENCH) $(TARGET_TEST_ARG)
+	rm -f $(TARGET_MAIN) $(TARGET_TEST) $(TARGET_BENCH) $(TARGET_TEST_ARGS)
 
 .PHONY: all clean test benchmark
