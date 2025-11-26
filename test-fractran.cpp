@@ -143,6 +143,23 @@ void test_BBf17() {
   pass("BBf17");
 }
 
+void test_BBf20() {
+  std::vector<mpq_class> fractans = { mpq_class(7, 15),
+				  mpq_class(22, 3),
+				  mpq_class(6, 77),
+				  mpq_class(5, 2),
+				  mpq_class(9, 5)};
+  Fractran machine(fractans, 2);
+  machine.runMachine(1000);
+
+  assert(machine.getStepCount() == 746);
+
+  mpz_class expected  {"311973482284542371301330321821976049"};
+  assert(machine.getLastNumber() == expected);
+
+  pass("BBf20");
+}
+
 void test_BBf21() {
   std::vector<mpq_class> fractans = { mpq_class(7, 15),
 				  mpq_class(4, 3),
@@ -173,6 +190,7 @@ int main() {
     test_BBf15();
     test_BBf16();
     test_BBf17();
+    test_BBf20();
     //test_BBf21();
 
     std::cout << "------------------------------" << std::endl;
