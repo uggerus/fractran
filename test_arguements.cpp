@@ -81,7 +81,7 @@ void test_file_override() {
 
     // 2. Test Override Input: ./fractran file 200
     // Should ignore 100 and use 200.
-    std::vector<std::string> args = {filename, "200"};
+    std::vector<std::string> args = {filename, "200", "1000"};
     FractranConfig conf = parseFractranArgs(args);
 
     // 3. Cleanup
