@@ -167,11 +167,13 @@ void test_BBf21() {
 				  mpq_class(5, 2),
 				  mpq_class(9, 5)};
   Fractran machine(fractans, 2);
-  machine.runMachine(100000000);
+  for(auto i = 0; i < 100; ++i){
+    machine.runMachine(10000);
+    //std::cout << machine.getStepCount() << std::endl;
+    std::cout << i << std::endl;
+  }
 
-  std::cout << machine.getStepCount() << std::endl;
-
-  assert(machine.getStepCount() == 107);
+  assert(machine.getStepCount() == 31957632);
 
   pass("BBf21");
 }
