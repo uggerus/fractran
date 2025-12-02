@@ -15,10 +15,10 @@ TARGET_BENCH = benchmark_sim
 
 # Source files
 SRC_MAIN = fractran_interpreter.cpp
-SRC_TEST = test-fractran.cpp
-SRC_TEST_ARGS = test_fractran.cpp
+SRC_TEST = test_fractran.cpp
+SRC_TEST_ARGS = test_arguements.cpp
 SRC_BENCH = benchmark.cpp
-HEADERS = fractran.h
+HEADERS = fractran.h arg_parser.h
 
 # Default target
 all: $(TARGET_MAIN)
@@ -40,7 +40,7 @@ $(TARGET_BENCH): $(SRC_BENCH) $(HEADERS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET_BENCH) $(SRC_BENCH) $(LDFLAGS)
 
 # Run Tests
-test: $(TARGET_TEST)
+test: $(TARGET_TEST) $(TARGET_TEST_ARGS)
 	@echo "--- Executing Tests ---"
 	./$(TARGET_TEST)
 	@echo "\n=== Running Argument Tests ==="
