@@ -50,7 +50,7 @@ void test_cli_multiple_fractions() {
 
 void test_file_parsing() {
     // 1. Create a temp file
-    std::string filename = "temp_test_prog.txt";
+    std::string filename = "temp_test_prog.frac";
     std::ofstream out(filename);
     out << "# Comment line\n";
     out << "3/2 5/4 # Inline comment\n";
@@ -74,7 +74,7 @@ void test_file_parsing() {
 
 void test_file_override() {
     // 1. Create a temp file (Has Input: 100)
-    std::string filename = "temp_override.txt";
+    std::string filename = "temp_override.frac";
     std::ofstream out(filename);
     out << "3/2\nInput: 100\n";
     out.close();
@@ -95,7 +95,7 @@ void test_file_override() {
 
 void test_file_override_steps() {
     // 1. Create a temp file (Has Input: 100)
-    std::string filename = "temp_steps.txt";
+    std::string filename = "temp_steps.frac";
     std::ofstream out(filename);
     out << "3/2\nInput: 100\n";
     out.close();
