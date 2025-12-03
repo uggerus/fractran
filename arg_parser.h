@@ -24,13 +24,13 @@ inline bool isInteger(const std::string& s) {
     return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
-// Helper: Check if string ends with suffix
 inline bool hasSuffix(const std::string& str, const std::string& suffix) {
     return str.size() >= suffix.size() &&
            str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
 }
 
-inline bool parseFileContent(const std::string& filepath, std::vector<mpq_class>& out_prog, std::string& out_input) {
+// UPDATED: Now accepts out_steps by reference
+inline bool parseFileContent(const std::string& filepath, std::vector<mpq_class>& out_prog, std::string& out_input, int& out_steps) {
     std::ifstream file(filepath);
     if (!file.is_open()) return false;
 
@@ -46,6 +46,10 @@ inline bool parseFileContent(const std::string& filepath, std::vector<mpq_class>
         while (ss >> segment) {
             if (segment == "Input:") {
                 if (ss >> segment) out_input = segment;
+            } else if (segment == "Steps:") { // NEW: Parse Steps from file
+                if (ss >> segment && isInteger(segment)) {
+                     try { out_steps = std::stoi(segment); } catch(...) {}
+                }
             } else {
                 try {
                     mpq_class frac(segment);
@@ -67,26 +71,28 @@ inline FractranConfig parseFractranArgs(const std::vector<std::string>& args) {
     }
 
     std::string input_str;
-    bool steps_set = false;
+    bool steps_set_by_cli = false;
     std::string target_file;
+    int file_steps = -1; // Sentinel value
 
-    // --- STRATEGY 1: Check for .frac File ---
-    
-    // Case A: User provided exact filename ending in .frac
+    // Strategy 1: Check for .frac File
     if (hasSuffix(args[0], ".frac") && fs::exists(args[0])) {
         target_file = args[0];
-    }
-    // Case B: User provided name without extension, but .frac exists (e.g. "prog" -> "prog.frac")
-    else if (fs::exists(args[0] + ".frac")) {
+    } else if (fs::exists(args[0] + ".frac")) {
         target_file = args[0] + ".frac";
     }
 
     if (!target_file.empty()) {
         // --- FILE MODE ---
-        if (!parseFileContent(target_file, config.program, input_str)) {
+        if (!parseFileContent(target_file, config.program, input_str, file_steps)) {
             config.success = false;
             config.errorMessage = "Failed to read file: " + target_file;
             return config;
+        }
+
+        // Apply file steps if found (can be overridden later by CLI)
+        if (file_steps > 0) {
+            config.steps = file_steps;
         }
 
         // Handle overrides
@@ -98,30 +104,27 @@ inline FractranConfig parseFractranArgs(const std::vector<std::string>& args) {
                     input_str = arg; // Must be input
                     next_arg_idx++;
                 } else {
-                    // Input exists in file. 
-                    // Check if 2 args remain (Override Input + Steps) or 1 arg (Steps)
                     if (next_arg_idx + 1 < args.size()) {
                          input_str = arg; // Override Input
                          next_arg_idx++;
                     } else {
-                         config.steps = std::stoi(arg); // Steps
-                         steps_set = true;
+                         config.steps = std::stoi(arg); // Override Steps
+                         steps_set_by_cli = true;
                          next_arg_idx++;
                     }
                 }
             }
         }
 
-        // Final check for steps
-        if (!steps_set && next_arg_idx < args.size()) {
+        // Final check for steps override
+        if (!steps_set_by_cli && next_arg_idx < args.size()) {
              if(isInteger(args[next_arg_idx])) {
                  config.steps = std::stoi(args[next_arg_idx]);
              }
         }
 
     } else {
-        // --- STRATEGY 2: Command Line List ---
-        // (Only enters here if no .frac file was found)
+        // --- CLI LIST MODE ---
         for (const auto& arg : args) {
             if (arg.find('/') != std::string::npos) {
                 try {
@@ -132,9 +135,9 @@ inline FractranConfig parseFractranArgs(const std::vector<std::string>& args) {
             } else if (isInteger(arg)) {
                 if (input_str.empty()) {
                     input_str = arg;
-                } else if (!steps_set) {
+                } else if (!steps_set_by_cli) {
                     config.steps = std::stoi(arg);
-                    steps_set = true;
+                    steps_set_by_cli = true;
                 }
             }
         }

@@ -114,6 +114,41 @@ void test_file_override_steps() {
     pass("File Steps Override (Input in file)");
 }
 
+void test_file_embedded_steps() {
+    // Scenario: File contains "Steps: 500"
+    std::string filename = "temp_embedded_steps.frac";
+    std::ofstream out(filename);
+    out << "3/2\nInput: 10\nSteps: 500\n";
+    out.close();
+
+    std::vector<std::string> args = {filename};
+    FractranConfig conf = parseFractranArgs(args);
+
+    fs::remove(filename);
+    assert(conf.success);
+    assert(conf.input == 10);
+    assert(conf.steps == 500); // Should read 500 from file, not default 1000
+    pass("File Parsing (Embedded 'Steps:')");
+}
+
+void test_file_steps_priority() {
+    // Scenario: File says "Steps: 500", but CLI says "50"
+    // Expectation: CLI wins
+    std::string filename = "temp_steps_priority.frac";
+    std::ofstream out(filename);
+    out << "3/2\nInput: 10\nSteps: 500\n";
+    out.close();
+
+    // Call: ./fractran file 50
+    std::vector<std::string> args = {filename, "50"};
+    FractranConfig conf = parseFractranArgs(args);
+
+    fs::remove(filename);
+    assert(conf.success);
+    assert(conf.steps == 50); // CLI (50) overrides File (500)
+    pass("File Parsing (CLI Steps override Embedded Steps)");
+}
+
 int main() {
     std::cout << "--- Testing Argument Parser ---\n";
     test_cli_simple();
@@ -122,6 +157,8 @@ int main() {
     test_file_parsing();
     test_file_override();
     test_file_override_steps();
+    test_file_embedded_steps();
+    test_file_steps_priority();
     std::cout << "-------------------------------\n";
     std::cout << "All Argument tests passed.\n";
     return 0;
